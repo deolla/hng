@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "node dist/server.js",
     "build": "babel src -d dist",
     "dev": "nodemon src/server.js",
-    "migrate:latest": "knex migrate:latest --knexfile src/database/knexfile.cjs --env production",
-    "seed:make": "knex seed:make --knexfile src/database/knexfile.cjs --env production",
-    "seed:run": "knex seed:run --knexfile src/database/knexfile.cjs --env production"
+    "migrate:latest": "knex migrate:latest --knexfile src/database/knexfile.js --env development",
+    "seed:make": "knex seed:make --knexfile src/database/knexfile.js --env production",
+    "seed:run": "knex seed:run --knexfile src/database/knexfile.js --env development"
   },
   "keywords": [],
   "author": "",
@@ -25,7 +25,12 @@
     "knex": "^3.1.0",
     "nodemailer": "^6.9.14",
     "pg": "^8.12.0",
+    "supertest": "^7.0.0",
     "uuid": "^10.0.0",
     "yup": "^1.4.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "mocha": "^10.6.0"
   }
 }

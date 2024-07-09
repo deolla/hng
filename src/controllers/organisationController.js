@@ -76,7 +76,7 @@ const getOrganisationById = async (req, res) => {
 
 const createOrganisation = async (req, res) => {
   try {
-    const userId = req.user?.userId;
+    const userId = req.user.userId;
 
     if (!userId) {
       console.error("User ID is missing from request:", req.user);
