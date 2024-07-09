@@ -1,17 +1,17 @@
 const request = require('supertest');
-const app = require('../src/server'); // Adjust path as necessary
-const db = require('../src/database/db'); // Adjust path as necessary
+const app = require('../src/server');
+const db = require('../src/database/db');
 const bcrypt = require('bcrypt');
 //const { generateToken } = require('../src/auth/tokenService'); // Adjust path as necessary
 
 describe('POST /auth/login', () => {
   beforeAll(async () => {
-    const passwordHash = await bcrypt.hash('testPassword123', 10); // Hashing password for testing
+    const passwordHash = await bcrypt.hash('testPassword123', 10);
     await db('users').insert({
       firstName: 'John',
       lastName: 'Doe',
       email: 'johndoe@example.com',
-      password: passwordHash,
+      password: 'passwordHash',
       phone: '+123456789'
     });
   });
@@ -36,7 +36,6 @@ describe('POST /auth/login', () => {
     expect(response.body.status).toBe('success');
     expect(response.body.data.accessToken).toBeDefined();
     expect(response.body.data.user.firstName).toBe('John');
-    // Add more assertions as needed for user details
   });
 
   it('should return 401 for incorrect password', async () => {
@@ -69,7 +68,7 @@ describe('POST /auth/login', () => {
     expect(response.body.message).toBe('User not found');
   });
   it('should return 400 for missing email or password', async () => {
-    const userData = {}; // Empty object for missing email and password
+    const userData = {}; 
 
     const response = await request(app)
       .post('/auth/login')

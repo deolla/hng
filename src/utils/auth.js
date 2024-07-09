@@ -24,12 +24,11 @@ const authenticate = (req, res, next) => {
 const generateToken = (user) => {
   const payload = {
     userId: user.userId,
-    email: user.email,
-    // Add other relevant data
+    email: user.email
   };
 
   const options = {
-    expiresIn: '1h', // Token expires in 1 hour
+    expiresIn: '1h',
   };
 
   return jwt.sign(payload, process.env.JWT_SECRET, options);

@@ -1,16 +1,16 @@
 const request = require('supertest');
-const app = require('../src/server'); // Adjust the path if necessary
-const db = require('../src/database/db'); // Assuming `db` is your Knex instance
+const app = require('../src/server');
+const db = require('../src/database/db');
 
-// Before all tests, ensure the database is set up
+
 beforeAll(async () => {
-  await db.migrate.latest(); // Run migrations
+  await db.migrate.latest();
 });
 
 // After all tests, clean up the database
 afterAll(async () => {
-  await db.migrate.rollback(); // Rollback migrations to clean up
-  await db.destroy(); // Destroy Knex connection
+  await db.migrate.rollback();
+  await db.destroy();
 });
 
 describe('POST /auth/register', () => {
@@ -27,9 +27,8 @@ describe('POST /auth/register', () => {
     const response = await request(app)
       .post('/auth/register')
       .send(userData)
-      .expect(201); // Expect HTTP 201 Created
+      .expect(201);
 
-    // Assertions
     expect(response.body).toHaveProperty('user');
     expect(response.body.user).toHaveProperty('firstName', 'J');
     expect(response.body.user).toHaveProperty('lastName', 'e');

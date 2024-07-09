@@ -37,11 +37,8 @@ const register = async (req, res) => {
         message: "Email already in use",
       });
     }
-
-    // Use bcrypt to encrypt user password
     const hashpass = await bcrypt.hash(password, 10);
 
-    // Insert user and organization creation within a transaction
     await db.transaction(async (trx) => {
       const userId = uuidv4();
       await trx("users").insert({
@@ -66,7 +63,6 @@ const register = async (req, res) => {
       // Send verification email
       await sendVerificationEmail(email, verificationToken);
 
-      // Generate JWT token
       const token = jwt.sign({ userId, email }, process.env.BATTLE_GROUND, {
         expiresIn: "24h",
       });
