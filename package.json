@@ -7,9 +7,9 @@
     "start": "node dist/server.js",
     "build": "babel src -d dist",
     "dev": "nodemon src/server.js",
-    "migrate:latest": "knex migrate:latest --knexfile src/database/knexfile.js --env development",
+    "migrate:latest": "knex migrate:latest --knexfile src/database/knexfile.js --env production",
     "seed:make": "knex seed:make --knexfile src/database/knexfile.js --env production",
-    "seed:run": "knex seed:run --knexfile src/database/knexfile.js --env development"
+    "seed:run": "knex seed:run --knexfile src/database/knexfile.js --env production"
   },
   "keywords": [],
   "author": "",

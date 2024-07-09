@@ -87,7 +87,7 @@ const register = async (req, res) => {
       });
     });
   } catch (err) {
-    console.error(`Registration Error: ${err}`);
+    //console.error(`Registration Error: ${err}`);
 
     if (err.name === "ValidationError") {
       const validationErrors = err.inner.map((err) => ({

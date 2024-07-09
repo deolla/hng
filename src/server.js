@@ -22,4 +22,4 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT} 🚀💻☕🤔`);
 });
 
-//module.exports = app; // only for testing purposes
+//module.exports = app; // for testing only
