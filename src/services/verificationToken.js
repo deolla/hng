@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 
-function generateVerificationToken(length = 40) {
-    return crypto.randomBytes(length).toString('hex');
-}
+const generateVerificationToken = () => {
+  return crypto.randomBytes(20).toString('hex');
+};
 
-module.exports = generateVerificationToken;
+module.exports = { generateVerificationToken };

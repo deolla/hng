@@ -9,15 +9,16 @@ const db = require('../database/db')
 const dotenv = require('dotenv');
 dotenv.config();
 
+
 const register = async (req, res) => {
-  const { firstName, lastName, email, password, phone, userId } = req.body;
+  const { firstName, lastName, email, password, phone } = req.body;
 
   if (!firstName || !lastName || !email || !password || !phone) {
     return res.status(400).json({ message: "All fields are required for registration" });
   }
 
   try {
-    // Validate user input
+    console.log("Validating user input...");
     await userSchema.validate(
       {
         firstName,
@@ -29,7 +30,7 @@ const register = async (req, res) => {
       { abortEarly: false }
     );
 
-    // Check if user already exists
+    console.log("Checking if user already exists...");
     const existingUser = await db("users").where("email", email).first();
     if (existingUser) {
       return res.status(409).json({
@@ -37,6 +38,8 @@ const register = async (req, res) => {
         message: "Email already in use",
       });
     }
+
+    console.log("Hashing password...");
     const hashpass = await bcrypt.hash(password, 10);
 
     await db.transaction(async (trx) => {
@@ -50,23 +53,22 @@ const register = async (req, res) => {
         phone,
       });
 
+      console.log("Creating default organisation...");
       await trx("organisations").insert({
         name: `${firstName}'s Organisation`,
         description: `${firstName}'s default organisation`,
       });
 
-      await trx.commit();
-
-      // Generate verification token
       const verificationToken = generateVerificationToken();
 
-      // Send verification email
+      console.log("Sending verification email...");
       await sendVerificationEmail(email, verificationToken);
 
       const token = jwt.sign({ userId, email }, process.env.BATTLE_GROUND, {
         expiresIn: "24h",
       });
 
+      console.log("Registration successful...");
       return res.status(201).json({
         status: "success",
         message: "Registration successful",
@@ -83,8 +85,7 @@ const register = async (req, res) => {
       });
     });
   } catch (err) {
-    //console.error(`Registration Error: ${err}`);
-
+    console.error(`Registration Error: ${err}`);
     if (err.name === "ValidationError") {
       const validationErrors = err.inner.map((err) => ({
         field: err.path,
@@ -107,6 +108,8 @@ const register = async (req, res) => {
     });
   }
 };
+
+
 
 
 const login = async (req, res) => {

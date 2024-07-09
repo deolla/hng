@@ -20,3 +20,4 @@ app.use('/api', organisationsRoute);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT} 🚀💻☕🤔`);
 });
+module.exports = app; // for testing only
