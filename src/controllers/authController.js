@@ -51,24 +51,28 @@ const register = async (req, res) => {
         password: hashpass,
         phone,
       });
-
+      console.log("Creating default organisation...");
       await trx("organisations").insert({
         name: `${firstName}'s Organisation`,
         description: `${firstName}'s default organisation`,
       });
 
-      await trx.commit();
+      //await trx.commit();
 
       // Generate verification token
       const verificationToken = generateVerificationToken();
+      console.log('Generating verification token', verificationToken);
 
       // Send verification email
+      console.log("Creating default organisation...");
       await sendVerificationEmail(email, verificationToken);
 
       const token = jwt.sign({ userId, email }, process.env.BATTLE_GROUND, {
         expiresIn: "24h",
       });
+      console.log("Generated JWT Token: ", token);
 
+      console.log("Registration successful...");
       return res.status(201).json({
         status: "success",
         message: "Registration successful",
