@@ -18,7 +18,7 @@ const register = async (req, res) => {
   }
 
   try {
-    console.log("Validating user input...");
+    // Validate user input
     await userSchema.validate(
       {
         firstName,
@@ -30,7 +30,7 @@ const register = async (req, res) => {
       { abortEarly: false }
     );
 
-    console.log("Checking if user already exists...");
+    // Check if user already exists
     const existingUser = await db("users").where("email", email).first();
     if (existingUser) {
       return res.status(409).json({
@@ -39,7 +39,6 @@ const register = async (req, res) => {
       });
     }
 
-    console.log("Hashing password...");
     const hashpass = await bcrypt.hash(password, 10);
 
     await db.transaction(async (trx) => {
@@ -53,22 +52,23 @@ const register = async (req, res) => {
         phone,
       });
 
-      console.log("Creating default organisation...");
       await trx("organisations").insert({
         name: `${firstName}'s Organisation`,
         description: `${firstName}'s default organisation`,
       });
 
+      await trx.commit();
+
+      // Generate verification token
       const verificationToken = generateVerificationToken();
 
-      console.log("Sending verification email...");
+      // Send verification email
       await sendVerificationEmail(email, verificationToken);
 
       const token = jwt.sign({ userId, email }, process.env.BATTLE_GROUND, {
         expiresIn: "24h",
       });
 
-      console.log("Registration successful...");
       return res.status(201).json({
         status: "success",
         message: "Registration successful",
